@@ -6,7 +6,7 @@ async function analyzeSentiment(text) {
       text: text
     });
 
-    console.log('Sentiment:', response.data.sentiment);
+    console.log('Predicted Genre:', response.data.predicted_genre);
     console.log('Probabilities:', response.data.probabilities);
     
   } catch (error) {
@@ -14,4 +14,4 @@ async function analyzeSentiment(text) {
   }
 }
 
-analyzeSentiment("To bake a simple vanilla cake, start by preheating your oven to 350°F (175°C) and greasing two 9-inch round cake pans. In a bowl, mix together the dry ingredients—flour, baking powder, and salt. In a separate large bowl, beat together softened butter and sugar until light and fluffy, then add eggs one at a time, followed by vanilla extract. Gradually add the dry ingredients to the butter mixture, alternating with milk, and mix until just combined. Pour the batter evenly into the prepared pans and bake for 25-30 minutes, or until a toothpick inserted in the center comes out clean. Let the cakes cool before frosting with your favorite frosting or enjoying them plain.");
+analyzeSentiment("Late at night, Lisa awoke to the sound of soft footsteps echoing through the dark house. She checked the hallway, but it was empty. Shrugging it off, she returned to bed, only to catch a glimpse of herself in the full-length mirror across the room. The reflection grinned back at her—not the tired, startled face she knew, but a wide, malicious smile, twisting as if it were someone else wearing her skin. As her heart raced, the reflection lifted a finger to its lips, whispering, Don't wake up.");

@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function analyzeSentiment(text) {
+async function analyzeGenre(text) {
   try {
     const response = await axios.post('http://localhost:5000/classify_genre', {
       text: text
@@ -10,7 +10,7 @@ async function analyzeSentiment(text) {
     console.log('Probabilities:', response.data.probabilities);
     
   } catch (error) {
-    console.error('Error analyzing sentiment:', error);
+    console.error('Error analyzing genre:', error);
   }
 }
 

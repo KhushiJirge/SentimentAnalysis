@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from transformers import XLMRobertaTokenizer, XLMRobertaForSequenceClassification
+from transformers import XLMRobertaTokenizer, XLMRobertaForSequenceClassification, GPT2LMHeadModel, GPT2Tokenizer
 import torch
 
 tokenizer = XLMRobertaTokenizer.from_pretrained('classla/xlm-roberta-base-multilingual-text-genre-classifier')
@@ -9,6 +9,9 @@ GENRE_LABELS = [
     "Other", "Information", "News", "Instruction", "Argumentation", 
     "Forum", "Fiction", "Legal", "Promotion"
 ]
+
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+model = GPT2LMHeadModel.from_pretrained('gpt2', pad_token_id=tokenizer.eos_token_id)
 
 app = Flask(__name__)
 
@@ -35,6 +38,20 @@ def classify_genre():
         "predicted_genre": predicted_genre,
         "probabilities": probs
     })
+
+@app.route('/generate-suggestions', methods=['POST'])
+def generate_suggestions():
+    data = request.json
+    input_text = data.get("text", "")
+
+    inputs = tokenizer.encode(input_text, return_tensors='pt')
+    outputs = model.generate(inputs, max_length=1000, do_sample=True, num_beams=5, no_repeat_ngram_size=2, early_stopping=True)
+
+    text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    return jsonify({ "suggestions": text  })
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5000)

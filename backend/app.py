@@ -10,8 +10,8 @@ GENRE_LABELS = [
     "Forum", "Fiction", "Legal", "Promotion"
 ]
 
-tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-model = GPT2LMHeadModel.from_pretrained('gpt2', pad_token_id=tokenizer.eos_token_id)
+tokenizer_2 = GPT2Tokenizer.from_pretrained('gpt2')
+model_2 = GPT2LMHeadModel.from_pretrained('gpt2', pad_token_id=tokenizer.eos_token_id)
 
 app = Flask(__name__)
 
@@ -39,17 +39,19 @@ def classify_genre():
         "probabilities": probs
     })
 
-@app.route('/generate-suggestions', methods=['POST'])
+@app.route('/generate_suggestions', methods=['POST'])
 def generate_suggestions():
     data = request.json
     input_text = data.get("text", "")
 
-    inputs = tokenizer.encode(input_text, return_tensors='pt')
-    outputs = model.generate(inputs, max_length=1000, do_sample=True, num_beams=5, no_repeat_ngram_size=2, early_stopping=True)
+    inputs = tokenizer_2.encode(input_text, return_tensors='pt')
+    outputs = model_2.generate(inputs, max_length=1000, do_sample=True, num_beams=5, no_repeat_ngram_size=2, early_stopping=True)
 
-    text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    text = tokenizer_2.decode(outputs[0], skip_special_tokens=True)
 
-    return jsonify({ "suggestions": text  })
+    final = str(text).replace(input_text,  "")
+
+    return jsonify({ "suggestions": final  })
 
 
 
